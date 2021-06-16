@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "4567:4567"
+    volumes:
+      - .:/app
+      - gem_cache:/gems
+    environment:
+      - RACK_COOKIE_SECRET='rack_cookie_secret'
+    env_file:
+      - .env
+
+volumes:
+  gem_cache:
