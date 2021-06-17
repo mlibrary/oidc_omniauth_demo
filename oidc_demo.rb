@@ -38,7 +38,7 @@ get '/logout' do
 
   #This is the Cosign logout CGI on the SHIBBOLETH IDP
   #This lets you put a redirect link after the cosign logout
-  redirect "https://shibboleth.umich.edu/cgi-bin/logout?https://lib.umich.edu/"
+  redirect "https://lib.umich.edu/"
 
   #This is the IDP initiated logout endpoint; It will redirect to http://umich.edu 
   #redirect "https://shibboleth.umich.edu/idp/profile/Logout"
@@ -46,7 +46,7 @@ end
 
 get '/' do
   "<p>session[:info] #{session[:info].to_h.to_s}</p>" +
-    "<p><a href='/logout'>Logout</a></p>"
+    "<p><a href='https://shibboleth.umich.edu/cgi-bin/logout?http://localhost:4567/logout'>Logout</a></p>"
 end
 
 before  do
