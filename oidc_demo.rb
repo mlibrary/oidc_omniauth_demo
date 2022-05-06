@@ -1,20 +1,26 @@
 require 'sinatra'
 require 'omniauth'
 require 'omniauth_openid_connect'
-require 'byebug'
 
 enable :sessions
-set :session_secret, ENV['RACK_COOKIE_SECRET'] 
+set :session_secret, ENV['RACK_SESSION_SECRET'] 
+
+configure :development do
+  OmniAuth.config.logger.level = Logger::DEBUG
+  set :logging, Logger::DEBUG
+end
+
+# use MyMiddleware
 
 use OmniAuth::Builder do
   provider :openid_connect, {
-    issuer: 'https://weblogin.lib.umich.edu',
+    issuer: ENV['OIDC_ISSUER'],
     discovery: true,
     client_auth_method: 'jwks',
-    scope: [:openid, :profile, :email],
+    scope: [:openid, :profile],
     client_options: {
-      identifier: ENV['WEBLOGIN_ID'],
-      secret: ENV['WEBLOGIN_SECRET'],
+      identifier: ENV['OIDC_CLIENT_ID'],
+      secret: ENV['OIDC_CLIENT_SECRET'],
       redirect_uri: "http://localhost:4567/auth/openid_connect/callback"
     }
   }
@@ -49,14 +55,30 @@ get '/' do
     "<p><a href='/logout'>Logout</a></p>"
 end
 
-before  do
-  #pass if the first part of the path is exempted from authentication; 
-  #in this case any paths under 'auth' or 'logout' should be exempted
-  pass if ['auth', 'logout'].include? request.path_info.split('/')[1] 
+get '/login' do
+  <<~HTML
+    <h1>Logging You In...<h1>
+    <script>
+      window.onload = function(){
+        document.forms['login_form'].submit();
+      }
+    </script>
+    <form id='login_form' method='post' action='/auth/openid_connect'>
+      <input type="hidden" name="authenticity_token" value='#{request.env["rack.session"]["csrf"]}'>
+      <noscript>
+        <button type="submit">Login</button>
+      </noscript>
+    </form>
+  HTML
+end
 
+before do
+  #pass if the first part of the path is exempted from authentication; 
+  #in this case any paths under 'auth', 'logout', and 'login' should be exempted
+  pass if ['auth', 'logout', 'login'].include? request.path_info.split('/')[1] 
 
   if !session[:authenticated] || Time.now.utc > session[:expires_at]
-    redirect '/auth/openid_connect'
+    redirect '/login'
   else
     pass
   end
