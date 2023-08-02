@@ -9,7 +9,7 @@ services:
       - .:/app
       - gem_cache:/gems
     environment:
-      - RACK_SESSION_SECRET='rack_cookie_secret'
+      - RACK_SESSION_SECRET='really_really_really_really_really_really_long_rack_cookie_secret'
     env_file:
       - .env
 
