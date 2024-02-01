@@ -7,5 +7,6 @@ services:
       - .:/app
     environment:
       - RACK_SESSION_SECRET='really_really_really_really_really_really_long_rack_cookie_secret'
+      - BASE_URL=http://localhost:4567
     env_file:
       - .env

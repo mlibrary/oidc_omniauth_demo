@@ -21,7 +21,7 @@ use OmniAuth::Builder do
     client_options: {
       identifier: ENV["OIDC_CLIENT_ID"],
       secret: ENV["OIDC_CLIENT_SECRET"],
-      redirect_uri: "http://localhost:4567/auth/openid_connect/callback"
+      redirect_uri: "#{ENV["BASE_URL"]}/auth/openid_connect/callback"
     }
   }
 end
