@@ -1,4 +1,4 @@
-FROM ruby:3.1
+FROM ruby:3.2
 ARG UNAME=app
 ARG UID=1000
 ARG GID=1000
@@ -16,5 +16,9 @@ USER $UNAME
 ENV BUNDLE_PATH /gems
 
 WORKDIR /app
+
+COPY --chown=${UID}:${GID} . /app
+
+RUN bundle install
 
 CMD ["bundle", "exec", "ruby", "oidc_demo.rb", "-o", "0.0.0.0"]

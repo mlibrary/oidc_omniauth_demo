@@ -2,7 +2,7 @@
 
 This is a demo of how to do authentication with OpenID Connect with omniauth.
 It has been tested with the Library OpenID Connect proxy to University of
-Michigan weblogin (weblogin.lib.umich.edu), but it should work with any OpenID
+Michigan weblogin (https://shibboleth.umich.edu), but it should work with any OpenID
 Connect provider.
 
 ## To build
@@ -18,13 +18,12 @@ For authentication in the Library, get these from A&E.
 
 3) build the image
 ```
-docker-compose build
-docker-compose run web bundle install
+docker compose build
 ```
 
 4) start the site
 ```
-docker-compose up
+docker compose up
 ```
 
 5) Go to http://localhost:4567 
