@@ -1,0 +1,15 @@
+name: Build lastest from main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-unstable:
+    uses: mlibrary/platform-engineering-workflows/.github/workflows/build-unstable.yml@v1
+    with:
+      image_name: sinatra-oidc-demo 
+      tag: ${{ github.sha }}
+      dockerfile: Dockerfile
+    secrets: inherit
